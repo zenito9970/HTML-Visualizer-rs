@@ -1,0 +1,17 @@
+[package]
+name = "html-visualizer"
+version = "0.1.0"
+authors = ["zenito9970 <zenito9970@gmail.com>"]
+edition = "2018"
+
+repository = "http://github.com/zenito9970/HTML-Visualizer-rs"
+description = "A visualization library for competitive programming"
+categories = ["development-tools::debugging", "visualization"]
+license = "MIT"
+readme = "README.md"
+
+[lib]
+path = "src/lib.rs"
+
+[dependencies]
+once_cell = "1.4"
