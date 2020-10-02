@@ -11,7 +11,7 @@ Rustでプログラムの動作を可視化するライブラリです。
 
 ```toml
 [dependencies]
-html_visualizer = { git = "http://github.com/zenito9970/HTML-Visualizer-rs.git" }
+html_visualizer = { git = "https://github.com/zenito9970/HTML-Visualizer-rs.git" }
 ```
 
 ### 定義されている描画命令
