@@ -10,6 +10,9 @@ categories = ["development-tools::debugging", "visualization"]
 license = "MIT"
 readme = "README.md"
 
+[profile.dev]
+opt-level = 3
+
 [lib]
 path = "src/lib.rs"
 
