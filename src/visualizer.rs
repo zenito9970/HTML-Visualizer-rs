@@ -52,8 +52,7 @@ impl Visualizer {
         let v = &mut self.inner.lock().unwrap();
 
         while let Some(Inst::NewPage) = v.insts.last() {
-            let last = v.insts.len() - 1;
-            v.insts.remove(last);
+            v.insts.pop();
         }
 
         let width = v.max_x - v.min_x;
