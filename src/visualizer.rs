@@ -73,15 +73,10 @@ impl Visualizer {
                 &Inst::Circle(x, y, r, color) => {
                     let (x, y, r) = ((offset_x + x) * scale, (offset_y + y) * scale, r * scale);
                     if before_color != Some(color) {
-                        write!(w, "c.fillStyle=\"{0}\";c.strokeStyle=\"{0}\";", color).unwrap();
+                        write!(w, "s(c,\"{}\");", color).unwrap();
                         before_color = Some(color);
                     }
-                    write!(
-                        w,
-                        "c.beginPath();c.arc({:.2},{:.2},{:.2},0,6.28);c.fill();",
-                        x, y, r
-                    )
-                    .unwrap();
+                    write!(w, "a(c,{:.0},{:.0},{:.0});", x, y, r).unwrap();
                 }
                 &Inst::Line(x1, y1, x2, y2, color) => {
                     let (x1, y1, x2, y2) = (
@@ -91,10 +86,10 @@ impl Visualizer {
                         (offset_y + y2) * scale,
                     );
                     if before_color != Some(color) {
-                        write!(w, "c.fillStyle=\"{0}\";c.strokeStyle=\"{0}\";", color).unwrap();
+                        write!(w, "s(c,\"{}\");", color).unwrap();
                         before_color = Some(color);
                     }
-                    write!(w, "c.beginPath();c.moveTo({},{});c.lineTo({},{});c.closePath();c.stroke();", x1, y1, x2, y2).unwrap();
+                    write!(w, "l(c,{:.0},{:.0},{:.0},{:.0});", x1, y1, x2, y2).unwrap();
                 }
             }
         }

@@ -129,6 +129,25 @@ function save_canvas() {
     a.click();
 }
 
+function s(c, color) {
+    c.fillStyle = color;
+    c.strokeStyle = color;
+}
+
+function a(c, x, y, r) {
+    c.beginPath();
+    c.arc(x, y, r, 0, 6.28);
+    c.fill();
+}
+
+function l(c, x1, y1, x2, y2) {
+    c.beginPath();
+    c.moveTo(x1, y1);
+    c.lineTo(x2, y2);
+    c.closePath();
+    c.stroke();
+}
+
 function page1(c){
 "###;
 
