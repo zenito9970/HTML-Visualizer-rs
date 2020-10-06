@@ -5,9 +5,15 @@ use visualizer::*;
 
 pub use color::Color;
 
-pub fn newpage() {
+pub fn setpage(page: usize) {
+    if cfg!(debug_assersions) {
+        visualizer().setpage(page);
+    }
+}
+
+pub fn nextpage() {
     if cfg!(debug_assertions) {
-        visualizer().newpage();
+        visualizer().nextpage();
     }
 }
 

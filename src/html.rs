@@ -147,8 +147,6 @@ function l(c, x1, y1, x2, y2) {
     c.closePath();
     c.stroke();
 }
-
-function page1(c){
 "###;
 
 pub const HTML_TAIL: &str = r###"

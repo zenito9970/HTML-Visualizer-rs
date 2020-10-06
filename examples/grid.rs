@@ -10,7 +10,7 @@ fn main() {
         }
         vis::circle(i, i, 0.5, vis::Color::BLACK);
         vis::line(i, i, n - 1, n - 1, vis::Color::RED);
-        vis::newpage();
+        vis::nextpage();
     }
     vis::finish();
 }
