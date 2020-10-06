@@ -22,6 +22,8 @@ html_visualizer = { git = "https://github.com/zenito9970/HTML-Visualizer-rs.git"
     - 座標(`x1`, `y1`)と座標(`x2`, `y2`)を結ぶ線を色`color`で描きます。
 - `newpage()`
     - 以降の描画命令を次のページのものとして扱います。
+- `setpage(page)`
+    - 以降の描画命令を指定したページのものとして扱います。
 
 自動で適したサイズに拡大・縮小されます。  
 なお、プログラム終了前に必ず `finish()` を呼ぶ必要があります。
