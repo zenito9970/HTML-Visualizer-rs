@@ -129,6 +129,31 @@ function save_canvas() {
     a.click();
 }
 
+function save_video() {
+    jump_head();
+
+    let cv = document.getElementById("c");
+    let stream = cv.captureStream();
+    let recorder = new MediaRecorder(stream, { mimeType: "video/webm" });
+    recorder.start();
+
+    start_play();
+    let i = setInterval(() => {
+        if(interval == null) {
+            stop_play();
+            clearInterval(i);
+            recorder.stop();
+        }
+    }, 500 / play_interval);
+
+    recorder.ondataavailable = e => {
+        let a = document.createElement("a");
+        a.href = URL.createObjectURL(new Blob([e.data], { type: e.data.type }));
+        a.download = "result.webm";
+        a.click();
+    };
+}
+
 function s(c, color) {
     c.fillStyle = color;
     c.strokeStyle = color;
@@ -158,6 +183,7 @@ pub const HTML_TAIL: &str = r###"
 <input type="button" value=">|" onclick="jump_last();"></input>
 fps: <input type="number" value="10" oninput="play_interval=this.value;"></input>
 <input type="button" value="save png" style="width: 100px;" onclick="save_canvas();"></input>
+<input type="button" value="save video" style="width: 100px;" onclick="save_video();"></input>
 <br/>
 pages: <span id="page-num"></span>
 <br/>
