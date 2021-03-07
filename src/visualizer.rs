@@ -9,6 +9,7 @@ use std::sync::{Arc, Mutex};
 enum Inst {
     Circle(f64, f64, f64, Color),    // (x, y, r, color)
     Line(f64, f64, f64, f64, Color), // (x1, y1, x2, y2, color)
+    Rect(f64, f64, f64, f64, Color), // (x1, y1, x2, y2, color)
 }
 
 struct VisualizerInternal {
@@ -59,9 +60,22 @@ impl Visualizer {
         v.max_y = v.max_y.max(y1.max(y2));
     }
 
+    pub fn rect(&mut self, x1: f64, y1: f64, x2: f64, y2: f64, color: Color) {
+        let v = &mut self.inner.lock().unwrap();
+        let p = v.now_page;
+        v.insts
+            .entry(p)
+            .or_insert(vec![])
+            .push(Inst::Rect(x1, y1, x2, y2, color));
+        v.min_x = v.min_x.min(x1.min(x2));
+        v.min_y = v.min_y.min(y1.min(y2));
+        v.max_x = v.max_x.max(x1.max(x2));
+        v.max_y = v.max_y.max(y1.max(y2));
+    }
+
     pub fn write_to_file(&mut self) {
-        let mut w = BufWriter::new(File::create("result.html").unwrap());
-        writeln!(w, "{}", HTML_HEADER).unwrap();
+        let mut writer = BufWriter::new(File::create("result.html").unwrap());
+        writeln!(writer, "{}", HTML_HEADER).unwrap();
         let v = &mut self.inner.lock().unwrap();
 
         let width = v.max_x - v.min_x;
@@ -71,17 +85,17 @@ impl Visualizer {
         let offset_y = -v.min_y;
 
         for (page, insts) in &v.insts {
-            write!(w, "function page{}(c){{", page).unwrap();
+            write!(writer, "function page{}(c){{", page).unwrap();
             let mut before_color: Option<Color> = None;
             for inst in insts {
                 match inst {
                     &Inst::Circle(x, y, r, color) => {
                         let (x, y, r) = ((offset_x + x) * scale, (offset_y + y) * scale, r * scale);
                         if before_color != Some(color) {
-                            write!(w, "s(c,\"{}\");", color).unwrap();
+                            write!(writer, "s(c,\"{}\");", color).unwrap();
                             before_color = Some(color);
                         }
-                        write!(w, "a(c,{:.0},{:.0},{:.0});", x, y, r).unwrap();
+                        write!(writer, "a(c,{:.0},{:.0},{:.0});", x, y, r).unwrap();
                     }
                     &Inst::Line(x1, y1, x2, y2, color) => {
                         let (x1, y1, x2, y2) = (
@@ -91,14 +105,28 @@ impl Visualizer {
                             (offset_y + y2) * scale,
                         );
                         if before_color != Some(color) {
-                            write!(w, "s(c,\"{}\");", color).unwrap();
+                            write!(writer, "s(c,\"{}\");", color).unwrap();
                             before_color = Some(color);
                         }
-                        write!(w, "l(c,{:.0},{:.0},{:.0},{:.0});", x1, y1, x2, y2).unwrap();
+                        write!(writer, "l(c,{:.0},{:.0},{:.0},{:.0});", x1, y1, x2, y2).unwrap();
+                    }
+                    &Inst::Rect(x1, y1, x2, y2, color) => {
+                        let (x1, y1, x2, y2) = (
+                            (offset_x + x1) * scale,
+                            (offset_y + y1) * scale,
+                            (offset_x + x2) * scale,
+                            (offset_y + y2) * scale,
+                        );
+                        let (x, y, w, h) = (x1, y2, x2 - x1, y2 - y1);
+                        if before_color != Some(color) {
+                            write!(writer, "s(c,\"{}\");", color).unwrap();
+                            before_color = Some(color);
+                        }
+                        write!(writer, "r(c,{:.0},{:.0},{:.0},{:.0});", x, y, w, h).unwrap();
                     }
                 }
             }
-            writeln!(w, "}}").unwrap();
+            writeln!(writer, "}}").unwrap();
         }
 
         let s = v
@@ -107,9 +135,9 @@ impl Visualizer {
             .map(|p| format!("page{}", p))
             .collect::<Vec<_>>()
             .join(",");
-        write!(w, "const page_func=[{}];", s).unwrap();
-        write!(w, "{}", HTML_TAIL).unwrap();
-        w.flush().unwrap();
+        write!(writer, "const page_func=[{}];", s).unwrap();
+        write!(writer, "{}", HTML_TAIL).unwrap();
+        writer.flush().unwrap();
     }
 }
 

@@ -172,6 +172,13 @@ function l(c, x1, y1, x2, y2) {
     c.closePath();
     c.stroke();
 }
+
+function r(c, x, y, w, h) {
+    c.beginPath();
+    c.rect(x, y, w, h);
+    c.closePath();
+    c.fill();
+}
 "###;
 
 pub const HTML_TAIL: &str = r###"
