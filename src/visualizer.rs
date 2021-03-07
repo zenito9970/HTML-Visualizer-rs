@@ -117,7 +117,7 @@ impl Visualizer {
                             (offset_x + x2) * scale,
                             (offset_y + y2) * scale,
                         );
-                        let (x, y, w, h) = (x1, y2, x2 - x1, y2 - y1);
+                        let (x, y, w, h) = (x1, y1, x2 - x1, y2 - y1);
                         if before_color != Some(color) {
                             write!(writer, "s(c,\"{}\");", color).unwrap();
                             before_color = Some(color);
