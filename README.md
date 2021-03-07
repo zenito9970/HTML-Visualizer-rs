@@ -20,7 +20,7 @@ html_visualizer = { git = "https://github.com/zenito9970/HTML-Visualizer-rs.git"
     - 座標(`x`, `y`)を中心に半径`r`の円を描き、色`color`で塗りつぶします。
 - `line(x1, y1, x2, y2, color)`
     - 座標(`x1`, `y1`)と座標(`x2`, `y2`)を結ぶ線を色`color`で描きます。
-- `line(x1, y1, x2, y2, color)`
+- `rect(x1, y1, x2, y2, color)`
     - 座標(`x1`, `y1`)を左上の頂点、座標(`x2`, `y2`)を右下の頂点とする長方形を色`color`で塗りつぶします。
 - `newpage()`
     - 以降の描画命令を次のページのものとして扱います。
